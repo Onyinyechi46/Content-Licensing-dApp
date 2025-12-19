@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Licensing Protocol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #434343 0%, #000000 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0072ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 i {
+            color: #0072ff;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #0072ff;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #0072ff 0%, #00c6ff 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,114,255,0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+
+        .info-panel {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            grid-column: 1 / -1;
+        }
+
+        .info-panel h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .log-container {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            min-height: 100px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dc3545;
+        }
+
+        .status-dot.connected {
+            background: #28a745;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feature {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .feature i {
+            color: #0072ff;
+            margin-right: 8px;
+        }
+
+        .wallet-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .wallet-info code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-copyright"></i> Content Licensing Protocol</h1>
+            <p>Register, license, and monetize digital content on Cardano blockchain with automated royalty distribution and smart contract enforcement.</p>
+        </div>
+
+        <div class="content">
+            <div class="card">
+                <h2><i class="fas fa-wallet"></i> Wallet Connection</h2>
+                <div class="status-indicator">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span id="statusText">Disconnected</span>
+                </div>
+                <div class="wallet-info">
+                    <div><strong>Wallet Address:</strong> <code id="walletAddress">Not connected</code></div>
+                    <div><strong>Script Address:</strong> <code id="scriptAddress">Connect wallet to view</code></div>
+                </div>
+                <button class="btn" id="connectWallet">
+                    <i class="fas fa-plug"></i> Connect Wallet
+                </button>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-plus-circle"></i> Register Content</h2>
+                <p>Register new digital content with NFT representation.</p>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-hashtag"></i> Content Hash (IPFS)</label>
+                    <input type="text" id="contentHash" placeholder="QmXyp123..." value="QmXyp123">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-tag"></i> License Price (ADA)</label>
+                    <input type="number" id="registerPrice" placeholder="5" value="5" min="1">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-percentage"></i> Royalty Percentage</label>
+                    <input type="number" id="royaltyPercent" placeholder="15" value="15" min="0" max="100">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-boxes"></i> Max Licenses (0 = unlimited)</label>
+                    <input type="number" id="maxLicenses" placeholder="100" value="100" min="0">
+                </div>
+                
+                <button class="btn btn-success" id="registerBtn">
+                    <i class="fas fa-file-contract"></i> Register Content
+                </button>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-shopping-cart"></i> Purchase License</h2>
+                <p>Purchase a license for registered content.</p>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-key"></i> Script UTxO Reference</label>
+                    <input type="text" id="purchaseUtxo" placeholder="Enter script UTxO...">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-user-tag"></i> Creator Address</label>
+                    <input type="text" id="creatorAddress" placeholder="Creator's address...">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-money-bill-wave"></i> Amount to Pay (ADA)</label>
+                    <input type="number" id="purchaseAmount" placeholder="5" value="5" min="1">
+                </div>
+                
+                <button class="btn btn-primary" id="purchaseBtn">
+                    <i class="fas fa-credit-card"></i> Purchase License
+                </button>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-exchange-alt"></i> Transfer License</h2>
+                <p>Transfer your license to another user.</p>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-key"></i> Your License UTxO</label>
+                    <input type="text" id="transferLicenseUtxo" placeholder="Enter license token UTxO...">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-user-friends"></i> Recipient Address</label>
+                    <input type="text" id="recipientAddress" placeholder="Recipient's address...">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-handshake"></i> Transfer Fee (ADA, 0 for free)</label>
+                    <input type="number" id="transferFee" placeholder="0" value="0" min="0">
+                </div>
+                
+                <button class="btn btn-warning" id="transferBtn">
+                    <i class="fas fa-paper-plane"></i> Transfer License
+                </button>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-money-check-alt"></i> Claim Revenue</h2>
+                <p>Claim accumulated royalty revenue.</p>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-key"></i> Revenue UTxO</label>
+                    <input type="text" id="revenueUtxo" placeholder="Enter revenue pool UTxO...">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-coins"></i> Amount to Claim (ADA)</label>
+                    <input type="number" id="claimAmount" placeholder="10" value="10" min="1">
+                </div>
+                
+                <button class="btn btn-success" id="claimBtn">
+                    <i class="fas fa-hand-holding-usd"></i> Claim Revenue
+                </button>
+            </div>
+
+            <div class="card">
+                <h2><i class="fas fa-search"></i> Verify License</h2>
+                <p>Verify the validity of a license.</p>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-key"></i> License Token UTxO</label>
+                    <input type="text" id="verifyUtxo" placeholder="Enter license token UTxO...">
+                </div>
+                
+                <div class="input-group">
+                    <label><i class="fas fa-clock"></i> Current Time Slot</label>
+                    <input type="number" id="currentTime" placeholder="Current slot number...">
+                </div>
+                
+                <button class="btn btn-secondary" id="verifyBtn">
+                    <i class="fas fa-check-circle"></i> Verify License
+                </button>
+            </div>
+
+            <div class="info-panel">
+                <h3><i class="fas fa-info-circle"></i> Contract Information</h3>
+                <div class="features">
+                    <div class="feature"><i class="fas fa-check"></i> Register content with unique NFT</div>
+                    <div class="feature"><i class="fas fa-check"></i> Purchase licenses with fungible tokens</div>
+                    <div class="feature"><i class="fas fa-check"></i> Automated royalty distribution</div>
+                    <div class="feature"><i class="fas fa-check"></i> License transfer with conditions</div>
+                    <div class="feature"><i class="fas fa-check"></i> Commercial vs non-commercial licenses</div>
+                    <div class="feature"><i class="fas fa-check"></i> Modification rights control</div>
+                    <div class="feature"><i class="fas fa-check"></i> License expiration management</div>
+                    <div class="feature"><i class="fas fa-check"></i> Revenue claiming for creators</div>
+                    <div class="feature"><i class="fas fa-check"></i> Platform fee automation</div>
+                    <div class="feature"><i class="fas fa-check"></i> Referral program support</div>
+                    <div class="feature"><i class="fas fa-check"></i> License verification system</div>
+                    <div class="feature"><i class="fas fa-check"></i> Dispute resolution mechanism</div>
+                </div>
+            </div>
+
+            <div class="log-container" id="log">
+Waiting for connection...
+Click "Connect Wallet" to begin.
+                </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
